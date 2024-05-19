@@ -3,6 +3,8 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Context;
+using Serilog.Events;
+using SerilogLogger.Dtos.Enums;
 using SerilogLogger.LoggerInterface;
 
 namespace SerilogLogger.LoggerImplementation.NormalLog
@@ -15,6 +17,8 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
 
         private readonly ILogger _logger;
 
+        const string defaultMessageTemplate = "{MessageTemplate}";
+
         public SerilogNormalLogger(
             string applicationId,
             string applicationName
@@ -24,14 +28,29 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
 
             _applicationName = applicationName;
 
-            var loggConfiguration = new ConfigurationBuilder()
+
+            var logConfiguration = new ConfigurationBuilder()
                 .AddJsonFile("LogConfiguration.json",
                     optional: true, reloadOnChange: true)
-                 .Build();
+                .Build();
 
-            _logger = new LoggerConfiguration()
-                 .ReadFrom.Configuration(loggConfiguration)
+
+
+
+            Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(logConfiguration)
+                    .Enrich.WithProperty("hostName", Environment.MachineName)
+                    .Enrich.WithProperty("EnvironmentUserName", Environment.UserName)
+                    .Enrich.WithProperty("Domain", _applicationName)
+                    .Enrich.WithProperty("ApplicationId", _applicationId)
+                    .Enrich.WithProperty("ApplicationId", _applicationId)
+                    .Enrich.WithProperty("ApplicationName", _applicationName)
+                .Destructure.ToMaximumCollectionCount(1024)
+                .Destructure.ToMaximumDepth(2)
+                .Destructure.ToMaximumStringLength(1024)
                  .CreateLogger();
+
+            _logger = Log.Logger;
 
         }
 
@@ -41,7 +60,8 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
             Exception? exception = null
         )
         {
-            SendLog("Debug", messageTemplate, exception, parameters);
+            
+            SendLog("Debug", messageTemplate, DateTimeOffset.Now, exception,parameters);
         }
 
 
@@ -52,7 +72,8 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
             bool useStackTrace = false
         )
         {
-            SendLog("Error", messageTemplate, exception, parameters, useStackTrace);
+
+            SendLog("Error", messageTemplate, DateTimeOffset.Now, exception, parameters,useStackTrace);
         }
 
 
@@ -62,7 +83,8 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
             Exception? exception = null
         )
         {
-            SendLog("Fatal", messageTemplate, exception, parameters);
+            SendLog("Fatal", messageTemplate, DateTimeOffset.Now, exception, parameters);
+
         }
 
 
@@ -72,7 +94,7 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
             Exception? exception = null
         )
         {
-            SendLog("Information", messageTemplate, exception, parameters);
+            SendLog("Information", messageTemplate, DateTimeOffset.Now, exception, parameters);
         }
 
 
@@ -82,7 +104,7 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
             Exception? exception = null
         )
         {
-            SendLog("Verbose", messageTemplate, exception, parameters);
+            SendLog("Verbose", messageTemplate, DateTimeOffset.Now, exception, parameters);
         }
 
 
@@ -92,101 +114,96 @@ namespace SerilogLogger.LoggerImplementation.NormalLog
             Exception? exception = null
         )
         {
-            SendLog("Warning", messageTemplate, exception, parameters);
+            SendLog("Warning", messageTemplate, DateTimeOffset.Now, exception, parameters);
         }
 
 
-        //public void QueueLog(
-        //    string level,
-        //    string messageTemplate,
-        //    List<KeyValuePair<string, object>>? parameters = null,
-        //    Exception? exception = null
-        //)
-        //{
-        //    SendLog(level, messageTemplate, exception, parameters);
-        //}
 
 
-        private void SendLog(
-            string level,
-            string messageTemplate,
-            Exception? exception,
-            List<KeyValuePair<string, object>>? parameters,
-            bool useStackTrace = false
-            )
+
+        private void SendLog(string level,
+        string messageTemplate,
+        DateTimeOffset logTime,
+        Exception? exception,
+        List<KeyValuePair<string, object>>? parameters,
+        bool useStackTrace = false)
         {
-
-            parameters ??= new List<KeyValuePair<string, object>>();
-
-
-            parameters.Add(new KeyValuePair<string, object>("EventOccurredTime",
-                DateTimeOffset.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz")));
-
-            parameters.Add(new("hostname",
-                Environment.MachineName));
-
-            parameters.Add(new("EnvironmentUserName",
-                Environment.UserName));
-
-            parameters.Add(new("Domain",
-                _applicationName));
-
-            parameters.Add(new("ApplicationId",
-                _applicationId));
-
-            parameters.Add(new("ApplicationName",
-                _applicationName));
-
-            if (useStackTrace && exception != null)
+            try
             {
-                var stackTrace = new StackTrace(exception);
+                parameters ??= new List<KeyValuePair<string, object>>();
 
-                var temp = new StringBuilder();
 
-                for (var i = 0; i < stackTrace.GetFrames().Length; i++)
+                parameters.Add(new KeyValuePair<string, object>("EventOccurredTime",
+                    logTime.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz")));
+
+                parameters.Add(new("Timespan", DateTimeOffset.Now));
+
+                if (useStackTrace && exception != null)
                 {
-                    temp.Append("the error has occurred in file line ");
-                    temp.Append($"number -> {stackTrace.GetFrames()[i].GetFileLineNumber()} ");
-                    temp.Append($"in file name -> {stackTrace.GetFrames()[i].GetFileName()} ");
-                    temp.Append($"in method name -> {stackTrace.GetFrames()[i].GetMethod()}");
-                    temp.Append("\n");
+                    var stackTrace = new StackTrace(exception);
 
-                    parameters.Add(
-                        new($"stack trace error list index-{i}",
-                            temp.ToString())
-                    );
+                    var temp = new StringBuilder();
+
+                    for (var i = 0; i < stackTrace.GetFrames().Length; i++)
+                    {
+                        temp.Append("the error has occurred in file line ");
+                        temp.Append($"number -> {stackTrace.GetFrames()[i].GetFileLineNumber()} ");
+                        temp.Append($"in file name -> {stackTrace.GetFrames()[i].GetFileName()} ");
+                        temp.Append($"in method name -> {stackTrace.GetFrames()[i].GetMethod()}");
+                        temp.Append("\n");
+
+                        parameters.Add(
+                            new($"stack trace error list index-{i}",
+                                temp.ToString())
+                        );
+                    }
+
+                    temp.Clear();
                 }
 
-                temp.Clear();
+                ILogger tempLogger = _logger.ForContext(
+                     "MessageTemplate",
+                     messageTemplate
+                 );
+
+                foreach (var (key, value) in parameters)
+                {
+
+                    tempLogger = tempLogger.ForContext(key, value);
+
+                }
+
+
+                switch (level)
+                {
+                    case "Debug":
+                        tempLogger.Debug(exception, defaultMessageTemplate);
+                        break;
+                    case "Error":
+                        tempLogger.Error(exception, defaultMessageTemplate);
+                        break;
+                    case "Fatal":
+                        tempLogger.Fatal(exception, defaultMessageTemplate);
+                        break;
+                    case "Information":
+                        tempLogger.Information(exception, defaultMessageTemplate);
+                        break;
+                    case "Verbose":
+                        tempLogger.Verbose(exception, defaultMessageTemplate);
+                        break;
+                    case "Warning":
+                        tempLogger.Warning(exception, defaultMessageTemplate);
+                        break;
+                }
+
+                tempLogger = null;
+
             }
-
-            foreach (var (key, value) in parameters)
-                LogContext.PushProperty(key, value);
-
-
-            switch (level)
+            catch (Exception ex)
             {
-                case "Debug":
-                    _logger.Debug(exception, messageTemplate);
-                    break;
-                case "Error":
-                    _logger.Error(exception, messageTemplate);
-                    break;
-                case "Fatal":
-                    _logger.Fatal(exception, messageTemplate);
-                    break;
-                case "Information":
-                    _logger.Information(exception, messageTemplate);
-                    break;
-                case "Verbose":
-                    _logger.Verbose(exception, messageTemplate);
-                    break;
-                case "Warning":
-                    _logger.Warning(exception, messageTemplate);
-                    break;
+                _logger.Error(ex, defaultMessageTemplate, $"Error Occurred in this solution.ErrorMessage:{ex.Message}");
             }
 
-            LogContext.Reset();
         }
     }
 }

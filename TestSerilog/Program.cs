@@ -14,8 +14,9 @@ builder.Services.AddLoggerDependencies(new ApplicationLogConfiguration
 {
     ApplicationId = "300",
     ApplicationName = "SerilogTest",
-    IsLogToQueue = false
+    IsLogToQueue = true
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

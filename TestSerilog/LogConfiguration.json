@@ -1,44 +1,48 @@
 {
-  "Serilog": {
-    "Using": [ "Serilog", "Serilog.Sinks.Console", "Serilog.Sinks.File", "Serilog.Sinks.Udp" ],
-    "MinimumLevel": "Verbose",
-    "WriteTo": [
-        {
-            "Name": "Console"
-        },
-        {
-            "Name": "File",
-          "Args": {
-            "path": "D:\\Logs\\SerilogTest\\SerilogTestLog.txt",
-            "outputTemplate": "Time:{Timespan:yyyy-MM-dd HH:mm:ss.fff} | Level:{Level:u3} | MachineName:{MachineName}{NewLine}Message:{Message}{NewLine}Properties:{Properties}{NewLine}Exception:{Exception}{NewLine}{NewLine}",
-            "fileSizeLimitBytes": 268435456, // 256MB (256*2^20)
-            "rollingInterval": "Day",
-            "retainedFileCountLimit": 10,
-            "rollOnFileSizeLimit": true,
-            "RestrictedToMinimumLevel": "Verbose"
-          }
-        },
-        {
-          "Name": "Udp",
-            "Args": {
-                "remoteAddress": "127.0.0.1",
-                "remotePort": 9999,
-                "family": "InterNetwork",
-                "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-                "restrictedToMinimumLevel": "Debug"
+    "Serilog": {
+        "Using": [ "Serilog", "Serilog.Sinks.Console", "Serilog.Sinks.File", "Serilog.Sinks.Udp" ],
+        "MinimumLevel": "Verbose",
+        "WriteTo": [
+            {
+                "Name": "Console",
+                "Args": {
+                    "outputTemplate": "Time:{EventOccurredTime} | Level:{Level:u3} |Message:{MessageTemplate}{NewLine}Exception:{Exception}{NewLine}{NewLine}"
+                }
+            },
+            {
+                "Name": "File",
+                "Args": {
+                    "path": "D:\\Logs\\SerilogTest\\SerilogTestLog.txt",
+                    "outputTemplate": "Time:{Timespan:yyyy-MM-dd HH:mm:ss.fff} | Level:{Level:u3} | MachineName:{hostName}{NewLine}Message:{MessageTemplate:l}{NewLine}Event occurred time:{EventOccurredTime}, ApplicationId:{ApplicationId}, Application Name:{ApplicationName}{NewLine}Properties:{Properties}{NewLine}Exception:{Exception}{NewLine}{NewLine}",
+                    "fileSizeLimitBytes": 268435456, // 256MB (256*2^20)
+                    "rollingInterval": "Day",
+                    "retainedFileCountLimit": 10,
+                    "rollOnFileSizeLimit": true,
+                    "RestrictedToMinimumLevel": "Verbose"
+                }
+            },
+            {
+                "Name": "Udp",
+                "Args": {
+                    "remoteAddress": "127.0.0.1",
+                    "remotePort": 9999,
+                    "family": "InterNetwork",
+                    "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
+                    "restrictedToMinimumLevel": "Debug"
+                }
             }
-        }
-        //,{ elastic
-        //  "Name": "Udp",
-        //  "Args": {
-        //    "remoteAddress": "10.56.100.188",
-        //    "remotePort": 12345,
-        //    "family": "InterNetwork",
-        //    "formatter": "Logging",
-        //    "RestrictedToMinimumLevel": "Debug"
-        //  }
-        //},
-    ],
-    "Enrich": [ "FromLogContext", "WithExceptionDetails", "WithThreadId", "WithMachineName" ]
-  }
+            //,{ elastic
+            //  "Name": "Udp",
+            //  "Args": {
+            //    "remoteAddress": "10.56.100.188",
+            //    "remotePort": 12345,
+            //    "family": "InterNetwork",
+            //    "formatter": "Logging",
+            //    "RestrictedToMinimumLevel": "Debug"
+            //  }
+            //},
+        ]
+            ,
+        "Enrich": [ "FromLogContext", "WithExceptionDetails", "WithThreadId", "WithMachineName" ]
+    }
 }

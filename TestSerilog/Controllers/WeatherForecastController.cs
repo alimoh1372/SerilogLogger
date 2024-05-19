@@ -39,33 +39,33 @@ namespace TestSerilog.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            _logger.Debug("Test Log Information", Summaries.GetKeyValuePairs("Summaries"));
-            _logger.Information("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
-            _logger.Warning("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
-            _logger.Error("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
+        //[HttpGet(Name = "GetWeatherForecast")]
+        //public IEnumerable<WeatherForecast> Get()
+        //{
+        //    _logger.Debug("Test Log Information", Summaries.GetKeyValuePairs("Summaries"));
+        //    _logger.Information("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
+        //    _logger.Warning("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
+        //    _logger.Error("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
 
            
-            _logger.Warning("Test class logging",_myClass.GetKeyValuePairs("MyClass"));
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-            Enumerable.Range(1, 10).AsParallel()
-                .ForAll((i) =>
-                {
-                    _logger.Information("Test logger speed.");
-                });
-            stopWatch.Stop();
-            var time = stopWatch.Elapsed.Milliseconds;
-            return Enumerable.Range(1, 1).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary ="10"
-            })
-            .ToArray();
-        }
+        //    _logger.Warning("Test class logging",_myClass.GetKeyValuePairs("MyClass"));
+        //    var stopWatch = new Stopwatch();
+        //    stopWatch.Start();
+        //    Enumerable.Range(1, 10).AsParallel()
+        //        .ForAll((i) =>
+        //        {
+        //            _logger.Information("Test logger speed.");
+        //        });
+        //    stopWatch.Stop();
+        //    var time = stopWatch.Elapsed.Milliseconds;
+        //    return Enumerable.Range(1, 1).Select(index => new WeatherForecast
+        //    {
+        //        Date = DateTime.Now.AddDays(index),
+        //        TemperatureC = Random.Shared.Next(-20, 55),
+        //        Summary ="10"
+        //    })
+        //    .ToArray();
+        //}
 
         [HttpPost(Name = "GetLogTime")]
         public string GetLogTime(int count)
@@ -79,7 +79,7 @@ namespace TestSerilog.Controllers
                 .WithDegreeOfParallelism(20)
                 .ForAll((i) =>
                 {
-                    _logger.Information($"{i}-Test logger speed.");
+                    _logger.Information($"{i}-Test logger speed.{Guid.NewGuid()}");
                 });
            
             stopWatch.Stop();
