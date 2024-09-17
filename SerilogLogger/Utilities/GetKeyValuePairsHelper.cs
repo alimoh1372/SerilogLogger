@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Serilog;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -16,55 +17,65 @@ public static class GetKeyValuePairsHelper
 
     private static List<KeyValuePair<string, object>> GetKeyValuePairsList(object obj, string baseName, bool prettyWriteValue = true)
     {
-        var jsonString = JsonSerializer.Serialize(obj, new JsonSerializerOptions()
-        { 
-            WriteIndented = prettyWriteValue,
-            ReferenceHandler = ReferenceHandler.IgnoreCycles
-        });
-
-        var jsonDocument = JsonDocument.Parse(jsonString);
-
-        switch (jsonDocument.RootElement.ValueKind)
+      
+        try
         {
-            case JsonValueKind.Array:
-                return GetArrayObjectKeyValuePairs(baseName, jsonDocument);
+            var jsonString = JsonSerializer.Serialize(obj, new JsonSerializerOptions()
+            {
+                WriteIndented = prettyWriteValue,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles
+            });
+            var jsonDocument = JsonDocument.Parse(jsonString);
 
-            case JsonValueKind.Number:
-                return new List<KeyValuePair<string, object>>()
-                {
-                    new ($"{baseName}", jsonDocument.RootElement.GetInt32())
-                };
+            switch (jsonDocument.RootElement.ValueKind)
+            {
+                case JsonValueKind.Array:
+                    return GetArrayObjectKeyValuePairs(baseName, jsonDocument);
 
-            case JsonValueKind.False:
-            case JsonValueKind.True:
-                return new List<KeyValuePair<string, object>>()
-                {
-                    new ($"{baseName}", jsonDocument.RootElement.GetBoolean())
-                };
+                case JsonValueKind.Number:
+                    return new List<KeyValuePair<string, object>>()
+                    {
+                        new ($"{baseName}", jsonDocument.RootElement.GetInt32())
+                    };
 
-            case JsonValueKind.Null:
-                return new List<KeyValuePair<string, object>>()
-                {
-                    new ($"{baseName}", "null")
-                };
+                case JsonValueKind.False:
+                case JsonValueKind.True:
+                    return new List<KeyValuePair<string, object>>()
+                    {
+                        new ($"{baseName}", jsonDocument.RootElement.GetBoolean())
+                    };
 
-            case JsonValueKind.String:
-                return new List<KeyValuePair<string, object>>()
-                {
-                    new ($"{baseName}", jsonDocument.RootElement.GetString())
-                };
+                case JsonValueKind.Null:
+                    return new List<KeyValuePair<string, object>>()
+                    {
+                        new ($"{baseName}", "null")
+                    };
 
-            case JsonValueKind.Object:
-                return jsonDocument.RootElement
-                    .EnumerateObject()
-                    .Select(jsonProperty =>
-                        new KeyValuePair<string, object>($"{baseName}.{jsonProperty.Name}", jsonProperty.Value))
-                    .ToList();
+                case JsonValueKind.String:
+                    return new List<KeyValuePair<string, object>>()
+                    {
+                        new ($"{baseName}", jsonDocument.RootElement.GetString())
+                    };
 
-            default:
-                return new List<KeyValuePair<string, object>>();
+                case JsonValueKind.Object:
+                    return jsonDocument.RootElement
+                        .EnumerateObject()
+                        .Select(jsonProperty =>
+                            new KeyValuePair<string, object>($"{baseName}.{jsonProperty.Name}", jsonProperty.Value))
+                        .ToList();
+
+                default:
+                    return new List<KeyValuePair<string, object>>();
+            }
+
 
         }
+        catch (Exception ex)
+        {
+            //Ignore exception
+            return new List<KeyValuePair<string, object>>();
+        }
+        
     }
 
     private static List<KeyValuePair<string, object>> GetSerializablePublicMember(object obj, string baseName, bool prettyWriteValue = true)
