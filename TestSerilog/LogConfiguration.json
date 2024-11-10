@@ -15,6 +15,20 @@
           "RestrictedToMinimumLevel": "Verbose"
         }
       },
+      // write each level into its corresponding file
+      {
+        "Name": "File",
+        "Args": {
+          "path": "D:\\SelilogLogger\\SerilogTest\\InformationLogs.txt",
+          "outputTemplate": "Level      :{Level:u3}{NewLine}Message    :{Message}{NewLine}Time       :{Timestamp:yyyy-MM-dd HH:mm:ss.fff}{NewLine}Properties :{Properties:j}{NewLine}Exception  :{Exception}{NewLine}*******************************{NewLine}",
+          "fileSizeLimitBytes": 268435456, // 256MB (256*2^20)
+          "rollingInterval": "Day",
+          "retainedFileCountLimit": 10,
+          "rollOnFileSizeLimit": true,
+          "restrictedToMinimumLevel": "Information",
+          "filter": "Level == 'Information'"
+        }
+      },
       {
         "Name": "Udp",
         "Args": {
