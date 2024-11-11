@@ -30,11 +30,6 @@ services.AddLoggerDependencies(applicationConfiguration);
 ```
 
 
-
-```
-services.Configure<ApplicationLogConfiguration>(appConfiguration.GetSection(nameof(ApplicationLogConfiguration)));
-```
-
 ### if `IsLogToQueue` is set to True all logging will be doen in single thread and reduce io time thus increasing performance 
 
 
