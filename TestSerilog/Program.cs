@@ -17,7 +17,6 @@ builder.Services.AddLoggerDependencies(new ApplicationLogConfiguration
 
 var app = builder.Build();
 
-
 app.UseSwagger();
 
 app.UseSwaggerUI();

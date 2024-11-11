@@ -14,4 +14,10 @@
 		<ProjectReference Include="..\SerilogLogger\SerilogLogger.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="LogConfiguration.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

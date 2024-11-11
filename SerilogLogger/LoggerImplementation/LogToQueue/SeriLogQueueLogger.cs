@@ -16,10 +16,8 @@ public class SeriLogQueueLogger : BaseSeriLog, ILog
     private void ProcessorLogs()
     {
         foreach (var log in _logs.GetConsumingEnumerable())
-        {
             using (log)
                 SendLog(log.LogLevel, log.LogMessage, log.LogException, log.LogParameters);
-        }
     }
 
     public void Debug(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null)
