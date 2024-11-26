@@ -8,11 +8,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var appConfiguration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json",
+        optional: true, reloadOnChange: true)
+    .Build();
+
+var applicationLogConfiguration = appConfiguration.GetSection(ApplicationLogConfiguration.ConfigurationSectionName)
+    .Get<ApplicationLogConfiguration>()!;
+
+
 builder.Services.AddLoggerDependencies(new ApplicationLogConfiguration
 {
-    ApplicationId = "700",
-    ApplicationName = "SerilogTest",
-    IsLogToQueue = false
+    ApplicationId = applicationLogConfiguration.ApplicationId,
+    ApplicationName = applicationLogConfiguration.ApplicationName,
+    IsLogToQueue = applicationLogConfiguration.IsLogToQueue
 });
 
 var app = builder.Build();

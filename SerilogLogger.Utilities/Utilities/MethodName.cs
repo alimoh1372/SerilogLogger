@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace SerilogLogger.Implementation.Utilities;
+namespace SerilogLogger.Utilities.Utilities;
 
 public static class MethodName
 {

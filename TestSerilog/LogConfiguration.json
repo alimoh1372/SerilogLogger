@@ -21,7 +21,7 @@
           "remoteAddress": "127.0.0.1",
           "remotePort": 9999,
           "family": "InterNetwork",
-          "formatter": "SerilogLogger.LogFormatter.ApplicationMonitor.Log4ApplicationMonitorFormatter, SerilogLogger",
+          "formatter": "SerilogLogger.Implementation.LogFormatter.ApplicationMonitor.Log4ApplicationMonitorFormatter, SerilogLogger.Implementation",
           "restrictedToMinimumLevel": "Debug"
         }
       }

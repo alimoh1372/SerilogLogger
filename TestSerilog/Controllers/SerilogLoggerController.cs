@@ -3,13 +3,14 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using SerilogLogger.Abstraction.LoggerInterface;
+using SerilogLogger.Utilities.Utilities;
 
 
 namespace TestSerilog.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class SerilogLoggerController : ControllerBase
     {
         private readonly ILog _logger;
 
@@ -34,38 +35,26 @@ namespace TestSerilog.Controllers
             },
             JsonSerialized = JsonSerializer.Serialize(Summaries)
         };
-        public WeatherForecastController(ILog logger)
+        public SerilogLoggerController(ILog logger)
         {
             _logger = logger;
         }
 
-        //[HttpGet(Name = "GetWeatherForecast")]
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    _logger.Debug("Test Log Information", Summaries.GetKeyValuePairs("Summaries"));
-        //    _logger.Information("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
-        //    _logger.Warning("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
-        //    _logger.Error("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
+        [HttpGet(Name = "GetLogTypesTest")]
+        public IActionResult Get()
+        {
+            _logger.Debug("Test Log Information", Summaries.GetKeyValuePairs("Summaries"));
 
+            _logger.Information("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
 
-        //    _logger.Warning("Test class logging",_myClass.GetKeyValuePairs("MyClass"));
-        //    var stopWatch = new Stopwatch();
-        //    stopWatch.Start();
-        //    Enumerable.Range(1, 10).AsParallel()
-        //        .ForAll((i) =>
-        //        {
-        //            _logger.Information("Test logger speed.");
-        //        });
-        //    stopWatch.Stop();
-        //    var time = stopWatch.Elapsed.Milliseconds;
-        //    return Enumerable.Range(1, 1).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateTime.Now.AddDays(index),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary ="10"
-        //    })
-        //    .ToArray();
-        //}
+            _logger.Warning("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
+
+            _logger.Error("Test Log information", Summaries.GetKeyValuePairs("Summaries"));
+
+            _logger.Warning("Test class logging", _myClass.GetKeyValuePairs("MyClass"));
+
+            return Ok($"Completed.");
+        }
 
         [HttpPost(Name = "GetLogTime")]
         public string GetLogTime(int count)
@@ -82,7 +71,7 @@ namespace TestSerilog.Controllers
                 {
                     _logger.Information($"{i}-Test logger speed."
 
-                        ,new List<KeyValuePair<string, object>>
+                        , new List<KeyValuePair<string, object>>
                         {
                             new KeyValuePair<string, object>(Guid.NewGuid().ToString().Substring(0, 5) + "- 1", Guid.NewGuid().ToString().Substring(0, 5)),
                             new KeyValuePair<string, object>(Guid.NewGuid().ToString().Substring(0, 5) + "- 2", Guid.NewGuid().ToString().Substring(0, 5)),
@@ -90,7 +79,7 @@ namespace TestSerilog.Controllers
                             new KeyValuePair<string, object>(Guid.NewGuid().ToString().Substring(0, 5) + "- 4", Guid.NewGuid().ToString().Substring(0, 5)),
                             new KeyValuePair<string, object>(Guid.NewGuid().ToString().Substring(0, 5) + "- 5", Guid.NewGuid().ToString().Substring(0, 5))
                         }
-                            );
+                    );
                 });
 
             stopWatch.Stop();

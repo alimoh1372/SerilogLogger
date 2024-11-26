@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using Serilog.Events;
-using SerilogLogger.Abstraction.Dtos;
 using SerilogLogger.Abstraction.LoggerInterface;
 using SerilogLogger.Implementation.Dtos;
 
