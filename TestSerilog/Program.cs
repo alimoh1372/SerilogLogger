@@ -1,4 +1,3 @@
-using SerilogLogger;
 using SerilogLogger.Abstraction.Dtos;
 using SerilogLogger.Implementation;
 
