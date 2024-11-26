@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SerilogLogger.Implementation.Utilities;
+namespace SerilogLogger.Utilities.Utilities;
 
 public static class GetKeyValuePairsHelper
 {
