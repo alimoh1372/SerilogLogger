@@ -1,6 +1,6 @@
 ﻿using Serilog.Events;
 
-namespace SerilogLogger.Dtos;
+namespace SerilogLogger.Implementation.Dtos;
 
 public struct LogDto : IDisposable
 {

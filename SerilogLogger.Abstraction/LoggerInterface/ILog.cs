@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace SerilogLogger.LoggerInterface;
+﻿namespace SerilogLogger.Abstraction.LoggerInterface;
 
 public interface ILog
 {

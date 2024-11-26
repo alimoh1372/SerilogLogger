@@ -2,7 +2,8 @@ using System.Diagnostics;
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using SerilogLogger.LoggerInterface;
+using SerilogLogger.Abstraction.LoggerInterface;
+
 
 namespace TestSerilog.Controllers
 {

@@ -1,5 +1,6 @@
 using SerilogLogger;
-using SerilogLogger.Dtos;
+using SerilogLogger.Abstraction.Dtos;
+using SerilogLogger.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 

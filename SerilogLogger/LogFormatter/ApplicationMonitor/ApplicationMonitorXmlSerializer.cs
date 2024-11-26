@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SerilogLogger.LogFormatter.ApplicationMonitor
+namespace SerilogLogger.Implementation.LogFormatter.ApplicationMonitor
 {
     public class ApplicationMonitorXmlSerializer
     {
