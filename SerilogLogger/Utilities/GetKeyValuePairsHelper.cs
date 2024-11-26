@@ -1,9 +1,8 @@
-﻿using Serilog;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace SerilogLogger.Utilities;
+namespace SerilogLogger.Implementation.Utilities;
 
 public static class GetKeyValuePairsHelper
 {

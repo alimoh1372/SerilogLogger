@@ -3,7 +3,7 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 
-namespace SerilogLogger.LoggerImplementation;
+namespace SerilogLogger.Implementation.LoggerImplementation;
 
 public class BaseSeriLog
 {

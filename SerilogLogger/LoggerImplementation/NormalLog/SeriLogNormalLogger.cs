@@ -1,7 +1,7 @@
 ﻿using Serilog.Events;
-using SerilogLogger.LoggerInterface;
+using SerilogLogger.Abstraction.LoggerInterface;
 
-namespace SerilogLogger.LoggerImplementation.NormalLog;
+namespace SerilogLogger.Implementation.LoggerImplementation.NormalLog;
 
 public class SeriLogNormalLogger : BaseSeriLog, ILog
 {

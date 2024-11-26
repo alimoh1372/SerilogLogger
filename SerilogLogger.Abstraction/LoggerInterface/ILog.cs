@@ -1,4 +1,4 @@
-﻿namespace SerilogLogger.LoggerInterface;
+﻿namespace SerilogLogger.Abstraction.LoggerInterface;
 
 public interface ILog
 {

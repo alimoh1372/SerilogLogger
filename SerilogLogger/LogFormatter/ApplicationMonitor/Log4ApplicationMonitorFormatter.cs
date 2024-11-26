@@ -2,7 +2,7 @@
 using Serilog.Events;
 using Serilog.Formatting;
 
-namespace SerilogLogger.LogFormatter.ApplicationMonitor;
+namespace SerilogLogger.Implementation.LogFormatter.ApplicationMonitor;
 public class Log4ApplicationMonitorFormatter : ITextFormatter
 {
     private static readonly string SourceContextPropertyName = "SourceContext";

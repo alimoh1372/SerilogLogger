@@ -1,10 +1,10 @@
 ﻿using System.Collections.Concurrent;
 using Serilog.Events;
-using SerilogLogger.Dtos;
-using SerilogLogger.LoggerInterface;
+using SerilogLogger.Abstraction.Dtos;
+using SerilogLogger.Abstraction.LoggerInterface;
+using SerilogLogger.Implementation.Dtos;
 
-
-namespace SerilogLogger.LoggerImplementation.LogToQueue;
+namespace SerilogLogger.Implementation.LoggerImplementation.LogToQueue;
 
 public class SeriLogQueueLogger : BaseSeriLog, ILog
 {
