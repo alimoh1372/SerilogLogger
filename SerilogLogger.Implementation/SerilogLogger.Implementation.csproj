@@ -21,13 +21,11 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
 		<PackageReference Include="Serilog.Sinks.Udp" Version="10.0.0" />
+		<PackageReference Include="SerilogLogger.Abstraction" Version="1.0.0" />
+		<PackageReference Include="SerilogLogger.Utilities" Version="1.0.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Reference Include="SerilogLogger.Abstraction">
-	    <HintPath>..\SerilogLogger.Abstraction\bin\Debug\netstandard2.1\SerilogLogger.Abstraction.dll</HintPath>
-	  </Reference>
-	</ItemGroup>
+	
 
 
 </Project>
