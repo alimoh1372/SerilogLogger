@@ -17,12 +17,7 @@ var applicationLogConfiguration = appConfiguration.GetSection(ApplicationLogConf
     .Get<ApplicationLogConfiguration>()!;
 
 
-builder.Services.AddLoggerDependencies(new ApplicationLogConfiguration
-{
-    ApplicationId = applicationLogConfiguration.ApplicationId,
-    ApplicationName = applicationLogConfiguration.ApplicationName,
-    IsLogToQueue = applicationLogConfiguration.IsLogToQueue
-});
+builder.Services.AddLoggerDependencies(applicationLogConfiguration);
 
 var app = builder.Build();
 

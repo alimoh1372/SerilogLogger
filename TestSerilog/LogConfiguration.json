@@ -12,7 +12,7 @@
           "rollingInterval": "Day",
           "retainedFileCountLimit": 10,
           "rollOnFileSizeLimit": true,
-          "RestrictedToMinimumLevel": "Verbose"
+          "RestrictedToMinimumLevel": "Information"
         }
       },
       {

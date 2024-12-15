@@ -10,12 +10,6 @@
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+		<PackageReference Include="SerilogLogger.Implementation" Version="1.0.0" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\SerilogLogger.Abstraction\SerilogLogger.Abstraction.csproj" />
-		<ProjectReference Include="..\SerilogLogger.Utilities\SerilogLogger.Utilities.csproj" />
-		<ProjectReference Include="..\SerilogLogger\SerilogLogger.Implementation.csproj" />
-	</ItemGroup>
-
 </Project>

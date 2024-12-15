@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerilogLogger.Implementation", "SerilogLogger\SerilogLogger.Implementation.csproj", "{8FD486BF-7EC1-4187-BE66-70BDB4774DD7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSerilog", "TestSerilog\TestSerilog.csproj", "{9C9BA5F7-3B30-40FC-B2D2-F3934B778079}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerilogLogger.Abstraction", "SerilogLogger.Abstraction\SerilogLogger.Abstraction.csproj", "{A0BD4406-ADAE-4A9A-A50D-AB1BD25066C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerilogLogger.Utilities", "SerilogLogger.Utilities\SerilogLogger.Utilities.csproj", "{22AD3C9E-E183-416D-B6E0-71450F4082AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerilogLogger.Utilities", "SerilogLogger.Utilities\SerilogLogger.Utilities.csproj", "{22AD3C9E-E183-416D-B6E0-71450F4082AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerilogLogger.Implementation", "SerilogLogger.Implementation\SerilogLogger.Implementation.csproj", "{F77CD926-D28A-4D0D-AB66-33FA2625B752}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8FD486BF-7EC1-4187-BE66-70BDB4774DD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FD486BF-7EC1-4187-BE66-70BDB4774DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FD486BF-7EC1-4187-BE66-70BDB4774DD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FD486BF-7EC1-4187-BE66-70BDB4774DD7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9C9BA5F7-3B30-40FC-B2D2-F3934B778079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9C9BA5F7-3B30-40FC-B2D2-F3934B778079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C9BA5F7-3B30-40FC-B2D2-F3934B778079}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{22AD3C9E-E183-416D-B6E0-71450F4082AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22AD3C9E-E183-416D-B6E0-71450F4082AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22AD3C9E-E183-416D-B6E0-71450F4082AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F77CD926-D28A-4D0D-AB66-33FA2625B752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F77CD926-D28A-4D0D-AB66-33FA2625B752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F77CD926-D28A-4D0D-AB66-33FA2625B752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F77CD926-D28A-4D0D-AB66-33FA2625B752}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
