@@ -6,6 +6,12 @@
 	  <Nullable>enable</Nullable>
 	  <LangVersion>10.0</LangVersion>
 	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <AssemblyVersion>1.0.1</AssemblyVersion>
+	  <FileVersion>1.0.1</FileVersion>
+	  <Version>1.0.1</Version>
+	  <Description>
+		  1-Remove Some utiliteis UnionKeyValuPair that has bugs.
+	  </Description>
   </PropertyGroup>
 
   <ItemGroup>
