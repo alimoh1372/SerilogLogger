@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -15,6 +15,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	  <Content Update="LogConfiguration.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>

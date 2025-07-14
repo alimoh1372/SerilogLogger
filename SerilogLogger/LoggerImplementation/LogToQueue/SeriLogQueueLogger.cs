@@ -1,7 +1,8 @@
-﻿using System.Collections.Concurrent;
-using Serilog.Events;
+﻿using Serilog.Events;
 using SerilogLogger.Dtos;
 using SerilogLogger.LoggerInterface;
+using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 
 
 namespace SerilogLogger.LoggerImplementation.LogToQueue;
@@ -17,24 +18,24 @@ public class SeriLogQueueLogger : BaseSeriLog, ILog
     {
         foreach (var log in _logs.GetConsumingEnumerable())
             using (log)
-                SendLog(log.LogLevel, log.LogMessage, log.LogException, log.LogParameters);
+                SendLog(log.LogLevel, log.LogMessage, log.MethodName, log.LogException, log.LogParameters);
     }
 
-    public void Debug(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null)
-        => _logs.Add(new LogDto(LogEventLevel.Debug, messageTemplate, parameters, exception));
+    public void Debug(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
+        => _logs.Add(new LogDto(LogEventLevel.Debug, messageTemplate, callerName, parameters, exception));
 
-    public void Error(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null)
-        => _logs.Add(new LogDto(LogEventLevel.Error, messageTemplate, parameters, exception));
+    public void Error(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
+        => _logs.Add(new LogDto(LogEventLevel.Error, messageTemplate, callerName, parameters, exception));
 
-    public void Fatal(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null)
-        => _logs.Add(new LogDto(LogEventLevel.Fatal, messageTemplate, parameters, exception));
+    public void Fatal(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
+        => _logs.Add(new LogDto(LogEventLevel.Fatal, messageTemplate, callerName, parameters, exception));
 
-    public void Information(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null)
-        => _logs.Add(new LogDto(LogEventLevel.Information, messageTemplate, parameters, exception));
+    public void Information(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
+        => _logs.Add(new LogDto(LogEventLevel.Information, messageTemplate, callerName, parameters, exception));
 
-    public void Verbose(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null)
-        => _logs.Add(new LogDto(LogEventLevel.Verbose, messageTemplate, parameters, exception));
+    public void Verbose(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
+        => _logs.Add(new LogDto(LogEventLevel.Verbose, messageTemplate, callerName, parameters, exception));
 
-    public void Warning(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null)
-        => _logs.Add(new LogDto(LogEventLevel.Warning, messageTemplate, parameters, exception));
+    public void Warning(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
+        => _logs.Add(new LogDto(LogEventLevel.Warning, messageTemplate, callerName, parameters, exception));
 }

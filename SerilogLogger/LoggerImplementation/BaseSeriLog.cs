@@ -28,21 +28,24 @@ public class BaseSeriLog
         Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(logConfiguration)
             .Enrich.WithProperty("Hostname", Environment.MachineName)
-            .Enrich.WithProperty("UserName", Environment.UserName)
-            // the "Domain" Enrich is for application monitor
+            .Enrich.WithProperty("Name", Environment.UserName)
             .Enrich.WithProperty("Domain", ApplicationName)
             .Enrich.WithProperty("ApplicationName", ApplicationName)
             .Enrich.WithProperty("ApplicationId", ApplicationId)
             .CreateLogger();
     }
 
-    protected void SendLog(LogEventLevel logEventLevel, string messageTemplate, Exception? exception, List<KeyValuePair<string, object>>? parameters)
+    protected void SendLog(LogEventLevel logEventLevel, string messageTemplate, string methodName, Exception? exception, List<KeyValuePair<string, object>>? parameters)
     {
         using (var disposeLogProperties = new DisposeLogProperties())
         {
             if (parameters is not null)
+            {
+                disposeLogProperties.Add(LogContext.PushProperty("methodName", methodName));
+
                 foreach (var parameter in parameters)
                     disposeLogProperties.Add(LogContext.PushProperty(parameter.Key, parameter.Value));
+            }
 
             Logger.Write(logEventLevel, exception, messageTemplate);
         }
