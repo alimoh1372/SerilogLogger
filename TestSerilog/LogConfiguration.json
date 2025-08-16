@@ -1,8 +1,41 @@
 {
   "Serilog": {
-    "Using": [ "Serilog", "Serilog.Sinks.File", "Serilog.Sinks.Udp" ],
     "MinimumLevel": "Verbose",
+    "Using": [ "Serilog", "Serilog.Sinks.File", "Serilog.Sinks.Udp", "Serilog.Expressions" ],
     "WriteTo": [
+
+      // log only info level
+      {
+        "Name": "Logger",
+        "Args": {
+          "configureLogger": {
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "expression": "@l = 'Information'"
+                }
+              }
+            ],
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "path": "D:\\SelilogLogger\\SerilogTest\\Information.txt",
+                  "outputTemplate": "Level      :{Level:u3}{NewLine}Message    :{Message}{NewLine}Time       :{Timestamp:yyyy-MM-dd HH:mm:ss.fff}{NewLine}Properties :{Properties:j}{NewLine}Exception  :{Exception}{NewLine}*******************************{NewLine}",
+                  "fileSizeLimitBytes": 268435456, // 256MB (256*2^20)
+                  "rollingInterval": "Day",
+                  "retainedFileCountLimit": 10,
+                  "rollOnFileSizeLimit": true,
+                  "RestrictedToMinimumLevel": "Information"
+                }
+              }
+            ]
+          }
+        }
+      },
+
+      // normal log 
       {
         "Name": "File",
         "Args": {
