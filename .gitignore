@@ -238,3 +238,4 @@ _Pvt_Extensions
 src/WebUI/ClientApp/package-lock.json
 /SerilogLogger.Implementation/LogFormatter/ApplicationMonitor/ApplicationMonitorXmlSerializer.cs
 /SerilogLogger.Implementation/LogFormatter/ApplicationMonitor/Log4ApplicationMonitorFormatter.cs
+/SerilogLogger/LogFormatter/ApplicationMonitor
