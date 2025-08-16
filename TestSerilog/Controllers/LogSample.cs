@@ -1,42 +1,10 @@
-# steps to setup logger:
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using SerilogLogger.LoggerInterface;
+using SerilogLogger.Utilities;
 
-## 1. add `SerilogLogger.csproj` refrence to sulotion
+namespace TestSerilog.Controllers;
 
-
-## 2. create `LogConfiguration.json` for log setting
-
-
-## 3. add following configuration to `appsetting.json`
-
-```
-"ApplicationLogConfiguration": {
-
-  "ApplicationId": "15",
-
-  "ApplicationName": "Ressa",
-
-  "IsLogToQueue": true
-}
-```
-
-4. add log service to di
-
-```
-var applicationConfiguration = configuration
-    .GetSection(nameof(ApplicationLogConfiguration))
-    .Get<ApplicationLogConfiguration>()!;
-
-services.AddLoggerDependencies(applicationConfiguration);
-```
-
-
-### if `IsLogToQueue` is set to True all logging will be doen in single thread and reduce io time thus increasing performance 
-
-
-
-# useage:
-
-```
 public class LogSample
 {
     private readonly ILog _logger;
@@ -127,25 +95,3 @@ public class LogSample
         }
     }
 }
-```
-
-
-
-#### recomended log properties (like above sample)
-
-1. class name
-2. method name 
-
-
-#### defult enrich in all logs (defult log properties)
-
-1. Machine Name
-2. Thread Id
-3. Thread Name
-4. Process Name
-5. Process Id
-6. Host Name
-7. User Name
-8. Application Id (read from `ApplicationLogConfiguration` of appsetting)
-9. Application Name (read from `ApplicationLogConfiguration` of appsetting)
-10. Domain (the "Domain" Enrich is for application monitor)

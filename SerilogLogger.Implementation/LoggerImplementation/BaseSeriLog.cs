@@ -2,80 +2,54 @@
 using Serilog;
 using Serilog.Context;
 using Serilog.Events;
+using SerilogLogger.Utilities;
 
 namespace SerilogLogger.Implementation.LoggerImplementation;
 
 public class BaseSeriLog
 {
-    protected readonly string _applicationId;
+    protected readonly string ApplicationId;
 
-    protected readonly string _applicationName;
+    protected readonly string ApplicationName;
 
-    protected readonly ILogger _logger;
+    protected readonly ILogger Logger;
 
     protected BaseSeriLog(string applicationId, string applicationName)
     {
-        _applicationId = applicationId;
+        ApplicationId = applicationId;
 
-        _applicationName = applicationName;
+        ApplicationName = applicationName;
 
         var logConfiguration = new ConfigurationBuilder()
             .AddJsonFile("LogConfiguration.json",
                 optional: true, reloadOnChange: true)
             .Build();
 
-        _logger = new LoggerConfiguration()
+        Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(logConfiguration)
             .Enrich.WithProperty("Hostname", Environment.MachineName)
-            .Enrich.WithProperty("UserName", Environment.UserName)
-            // the "Domain" Enrich is for application monitor
-            .Enrich.WithProperty("Domain", _applicationName)
-            .Enrich.WithProperty("ApplicationName", _applicationName)
-            .Enrich.WithProperty("ApplicationId", _applicationId)
+            .Enrich.WithProperty("Name", Environment.UserName)
+            .Enrich.WithProperty("Domain", ApplicationName)
+            .Enrich.WithProperty("ApplicationName", ApplicationName)
+            .Enrich.WithProperty("ApplicationId", ApplicationId)
             .CreateLogger();
     }
 
-    protected void SendLog(LogEventLevel logEventLevel, string messageTemplate, Exception? exception, List<KeyValuePair<string, object>>? parameters)
+    protected void SendLog(LogEventLevel logEventLevel, string messageTemplate, string methodName, Exception? exception, List<KeyValuePair<string, object>>? parameters)
     {
-        if (parameters is not null)
+        using (var disposeLogProperties = new DisposeLogProperties())
         {
-            var disposables = new IDisposable[parameters.Count];
+            if (parameters is not null)
+            {
+                disposeLogProperties.Add(LogContext.PushProperty("methodName", methodName));
 
-            for (int i = 0; i < parameters.Count; i++)
-                disposables[i] = LogContext.PushProperty(parameters[i].Key, parameters[i].Value);
+                foreach (var parameter in parameters)
+                    disposeLogProperties.Add(LogContext.PushProperty(parameter.Key, parameter.Value));
+            }
 
-            CheckLevel(logEventLevel, messageTemplate, exception, parameters);
-
-            foreach (var disposable in disposables) disposable.Dispose();
-
+            Logger.Write(logEventLevel, exception, messageTemplate);
         }
-        else CheckLevel(logEventLevel, messageTemplate, exception, parameters);
-        
+
         LogContext.Reset();
-    }
-
-    private void CheckLevel(LogEventLevel logEventLevel, string messageTemplate, Exception? exception, List<KeyValuePair<string, object>>? parameters)
-    {
-        switch (logEventLevel)
-        {
-            case LogEventLevel.Information:
-                _logger.Information(exception, messageTemplate);
-                break;
-            case LogEventLevel.Verbose:
-                _logger.Verbose(exception, messageTemplate);
-                break;
-            case LogEventLevel.Warning:
-                _logger.Warning(exception, messageTemplate);
-                break;
-            case LogEventLevel.Debug:
-                _logger.Debug(exception, messageTemplate);
-                break;
-            case LogEventLevel.Fatal:
-                _logger.Fatal(exception, messageTemplate);
-                break;
-            case LogEventLevel.Error:
-                _logger.Error(exception, messageTemplate);
-                break;
-        }
     }
 }
