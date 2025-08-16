@@ -236,3 +236,5 @@ _Pvt_Extensions
 /CleanTest.ndproj
 /.mfractor
 src/WebUI/ClientApp/package-lock.json
+SerilogLogger/LogFormatter/ApplicationMonitor/ApplicationMonitorXmlSerializer.cs
+SerilogLogger/LogFormatter/ApplicationMonitor/Log4ApplicationMonitorFormatter.cs
