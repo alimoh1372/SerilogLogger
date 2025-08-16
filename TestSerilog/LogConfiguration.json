@@ -45,19 +45,7 @@
           "rollingInterval": "Day",
           "retainedFileCountLimit": 10,
           "rollOnFileSizeLimit": true,
-          "RestrictedToMinimumLevel": "Debug"
-        }
-      },
-
-      // application monitor
-      {
-        "Name": "Udp",
-        "Args": {
-          "remoteAddress": "127.0.0.1",
-          "remotePort": 9999,
-          "family": "InterNetwork",
-          "formatter": "SerilogLogger.LogFormatter.ApplicationMonitor.Log4ApplicationMonitorFormatter, SerilogLogger",
-          "restrictedToMinimumLevel": "Debug"
+          "RestrictedToMinimumLevel": "Information"
         }
       }
 

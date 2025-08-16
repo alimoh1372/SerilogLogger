@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SerilogLogger.Dtos;
-using SerilogLogger.LoggerImplementation.LogToQueue;
-using SerilogLogger.LoggerImplementation.NormalLog;
-using SerilogLogger.LoggerInterface;
+using SerilogLogger.Abstraction.Dtos;
+using SerilogLogger.Abstraction.LoggerInterface;
+using SerilogLogger.Implementation.LoggerImplementation.LogToQueue;
+using SerilogLogger.Implementation.LoggerImplementation.NormalLog;
 
-namespace SerilogLogger;
+namespace SerilogLogger.Implementation;
 
 public static class DependencyInjection
 {
