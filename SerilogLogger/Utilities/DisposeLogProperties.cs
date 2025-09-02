@@ -1,4 +1,4 @@
-﻿namespace SerilogLogger.Utilities;
+﻿namespace SerilogLogger.Utilities.Utilities;
 
 public class DisposeLogProperties : IDisposable
 {
