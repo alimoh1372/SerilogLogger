@@ -23,7 +23,6 @@
     },
     "Using": [
       "Serilog.Sinks.File",
-      "Serilog.Sinks.Console",
       "Serilog.Sinks.Async",
       "Serilog.Expressions"
     ],
@@ -32,13 +31,6 @@
       "ApplicationName": "SampleApp"
     },
     "WriteTo": [
-      {
-        "Name": "Console",
-        "Args": {
-          "outputTemplate": "{Timestamp:HH:mm:ss} [{Level:u3}] {ClassName}.{MethodName} {Message} {Properties}{NewLine}{Exception}",
-          "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console"
-        }
-      },
       {
         "Name": "Async",
         "Args": {
