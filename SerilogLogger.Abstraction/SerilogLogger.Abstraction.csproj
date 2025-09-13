@@ -8,10 +8,10 @@
     <!-- NuGet Package Configuration -->
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>SerilogLogger.Abstraction</PackageId>
-    <PackageVersion>2.0.1</PackageVersion>
-    <AssemblyVersion>2.0.1</AssemblyVersion>
-    <FileVersion>2.0.1</FileVersion>
-    <Version>2.0.1</Version>
+    <PackageVersion>2.0.2</PackageVersion>
+    <AssemblyVersion>2.0.2</AssemblyVersion>
+    <FileVersion>2.0.2</FileVersion>
+    <Version>2.0.2</Version>
     <Title>Serilog Logger Abstraction</Title>
     <Authors>AliMoh</Authors>
     <Company>AM</Company>

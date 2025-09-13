@@ -8,10 +8,10 @@
     <!-- NuGet Package Configuration -->
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>SerilogLogger.Implementation</PackageId>
-    <PackageVersion>2.0.1</PackageVersion>
-    <AssemblyVersion>2.0.1</AssemblyVersion>
-    <FileVersion>2.0.1</FileVersion>
-    <Version>2.0.1</Version>
+    <PackageVersion>2.0.2</PackageVersion>
+    <AssemblyVersion>2.0.2</AssemblyVersion>
+    <FileVersion>2.0.2</FileVersion>
+    <Version>2.0.2</Version>
     <Title>Serilog Logger Implementation</Title>
     <Authors>AliMoh</Authors>
     <Company>AM</Company>
@@ -41,9 +41,8 @@
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
     <PackageReference Include="Serilog.Sinks.Udp" Version="10.0.0" />
+    <PackageReference Include="SerilogLogger.Abstraction" Version="2.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SerilogLogger.Abstraction\SerilogLogger.Abstraction.csproj" />
-  </ItemGroup>
+  
 </Project>

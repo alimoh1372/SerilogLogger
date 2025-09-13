@@ -8,10 +8,10 @@
     <!-- NuGet Package Configuration -->
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>SerilogLogger.Utilities</PackageId>
-    <PackageVersion>2.0.1</PackageVersion>
-    <AssemblyVersion>2.0.1</AssemblyVersion>
-    <FileVersion>2.0.1</FileVersion>
-    <Version>2.0.1</Version>
+    <PackageVersion>2.0.2</PackageVersion>
+    <AssemblyVersion>2.0.2</AssemblyVersion>
+    <FileVersion>2.0.2</FileVersion>
+    <Version>2.0.2</Version>
     <Title>Serilog Logger Utilities</Title>
     <Authors>AliMoh</Authors>
     <Company>AM</Company>
@@ -37,9 +37,6 @@
     <!-- Core Dependencies -->
     <PackageReference Include="Serilog" Version="4.3.0" />
     <PackageReference Include="System.Text.Json" Version="9.0.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SerilogLogger.Abstraction\SerilogLogger.Abstraction.csproj" />
+    <PackageReference Include="SerilogLogger.Abstraction" Version="2.0.2" />
   </ItemGroup>
 </Project>
