@@ -1,5 +1,7 @@
 using SerilogLogger.Abstraction.Dtos;
+using SerilogLogger.Abstraction.LoggerInterface;
 using SerilogLogger.Implementation;
+using TestSerilog.Samples;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,7 @@ var applicationLogConfiguration = appConfiguration.GetSection(ApplicationLogConf
     .Get<ApplicationLogConfiguration>()!;
 
 
-builder.Services.AddLoggerDependencies(applicationLogConfiguration);
+builder.Services.AddLoggerDependencies(appConfiguration);
 
 var app = builder.Build();
 
@@ -27,4 +29,15 @@ app.UseSwaggerUI();
 
 app.MapControllers();
 
+var logger = app.Services.GetRequiredService<ILog>();
+if (logger == null)
+{
+    throw new NotImplementedException("ILog");
+}
+
+var sample = new UsageSamples(logger);
+
+sample.DemonstrateUsage();
+
 app.Run();
+

@@ -1,21 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-	  <TargetFramework>netstandard2.1</TargetFramework>
-	  <ImplicitUsings>enable</ImplicitUsings>
-	  <Nullable>enable</Nullable>
-	  <LangVersion>10.0</LangVersion>
-	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	  <AssemblyVersion>1.0.1</AssemblyVersion>
-	  <FileVersion>1.0.1</FileVersion>
-	  <Version>1.0.1</Version>
-	  <Description>
-		  1-Remove Some utiliteis UnionKeyValuPair that has bugs.
-	  </Description>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
+
+    <!-- NuGet Package Configuration -->
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>SerilogLogger.Utilities</PackageId>
+    <PackageVersion>2.0.2</PackageVersion>
+    <AssemblyVersion>2.0.2</AssemblyVersion>
+    <FileVersion>2.0.2</FileVersion>
+    <Version>2.0.2</Version>
+    <Title>Serilog Logger Utilities</Title>
+    <Authors>AliMoh</Authors>
+    <Company>AM</Company>
+    <Product>SerilogLogger</Product>
+    <Description>Utility functions and helper classes for Serilog logging. Complete package with all logging capabilities.</Description>
+    <PackageTags>serilog;logging;utilities;helpers;complete</PackageTags>
+    <PackageProjectUrl>https://github.com/yourrepo/seriloglogger</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yourrepo/seriloglogger</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>
+      v1.0.2:
+      - Removed UnionKeyValuePair utilities due to bugs
+      - Improved performance optimizations
+      - Better async logging support
+      - Complete logging solution package
+    </PackageReleaseNotes>
+    <Copyright>Copyright © YourCompany 2025</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Core Dependencies -->
+    <PackageReference Include="Serilog" Version="4.3.0" />
     <PackageReference Include="System.Text.Json" Version="9.0.8" />
+    <PackageReference Include="SerilogLogger.Abstraction" Version="2.0.2" />
   </ItemGroup>
-
 </Project>

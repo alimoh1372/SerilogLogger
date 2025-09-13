@@ -1,38 +1,105 @@
-﻿using Serilog.Events;
+﻿// ===================================
+// Dtos/OptimizedLogDto.cs - Memory efficient log DTO
+// ===================================
+using Serilog.Events;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace SerilogLogger.Implementation.Dtos;
 
-public struct LogDto : IDisposable
+/// <summary>
+/// بهینه‌سازی شده برای کاهش allocation و بهبود performance
+/// </summary>
+/// <summary>
+/// High-performance, memory-efficient log data transfer object
+/// Uses struct to avoid heap allocation for small logs
+/// </summary>
+[StructLayout(LayoutKind.Auto)] // Let compiler optimize layout
+public readonly struct LogDto : IEquatable<LogDto>
 {
-    public LogDto(LogEventLevel logLevel, string logMessage, string methodName, List<KeyValuePair<string, object>>? logParameters = null, Exception? logException = null)
-    {
-        LogLevel = logLevel;
-        LogMessage = logMessage;
-        LogException = logException;
-        LogParameters = logParameters;
-        MethodName = methodName;
+	public readonly LogEventLevel Level;
+	public readonly string Message;
+	public readonly string? CallerName;
+	public readonly string? CallerPath;
+	public readonly Exception? Exception;
+	public readonly IReadOnlyDictionary<string, object?>? Properties;
+	public readonly DateTime Timestamp;
+	public readonly int ThreadId;
 
-        LogParameters?.Add(new("date of create log", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz")));
-        LogParameters?.Add(new("ThreadId", Thread.CurrentThread.ManagedThreadId));
-    }
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public LogDto(
+		LogEventLevel level,
+		string message,
+		string? callerName = null,
+		string? callerPath = null,
+		IReadOnlyDictionary<string, object?>? properties = null,
+		Exception? exception = null)
+	{
+		Level = level;
+		Message = message ?? throw new ArgumentNullException(nameof(message));
+		CallerName = callerName;
+		CallerPath = callerPath;
+		Properties = properties;
+		Exception = exception;
+		Timestamp = DateTime.UtcNow;
+		ThreadId = Thread.CurrentThread.ManagedThreadId;
+	}
 
-    public LogEventLevel LogLevel { get; set; }
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static LogDto Create(
+		LogEventLevel level,
+		string message,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		[CallerMemberName] string? callerName = null,
+		[CallerFilePath] string? callerPath = null)
+	{
+		return new LogDto(level, message, callerName, callerPath, properties, exception);
+	}
 
-    public string LogMessage { get; set; }
+	// Efficient property access
+	public bool HasException => Exception != null;
+	public bool HasProperties => Properties != null && Properties.Count > 0;
+	public bool HasCaller => !string.IsNullOrEmpty(CallerName);
 
-    public string MethodName { get; set; }
+	// File name only (performance optimization)
+	public string? CallerFileName => string.IsNullOrEmpty(CallerPath)
+		? null
+		: Path.GetFileName(CallerPath);
 
-    public List<KeyValuePair<string, object>>? LogParameters { get; set; }
+	// IEquatable implementation for better performance in collections
+	public bool Equals(LogDto other)
+	{
+		return Level == other.Level &&
+			   Message == other.Message &&
+			   CallerName == other.CallerName &&
+			   CallerPath == other.CallerPath &&
+			   Timestamp.Equals(other.Timestamp) &&
+			   ThreadId == other.ThreadId;
+	}
 
-    public Exception? LogException { get; set; }
+	public override bool Equals(object? obj)
+	{
+		return obj is LogDto other && Equals(other);
+	}
 
-    public void Dispose()
-    {
-        LogMessage = String.Empty;
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(Level, Message, CallerName, Timestamp, ThreadId);
+	}
 
-        if (LogParameters != null)
-            LogParameters = null;
+	public static bool operator ==(LogDto left, LogDto right)
+	{
+		return left.Equals(right);
+	}
 
-        LogException = null;
-    }
+	public static bool operator !=(LogDto left, LogDto right)
+	{
+		return !left.Equals(right);
+	}
+
+	public override string ToString()
+	{
+		return $"[{Level}] {Message} ({CallerName})";
+	}
 }

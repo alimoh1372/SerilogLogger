@@ -1,28 +1,102 @@
-﻿using Serilog.Events;
+﻿// ===================================
+// SeriLogNormalLogger.cs - Enhanced Implementation
+// ===================================
+using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Events;
+using SerilogLogger.Abstraction.Dtos;
 using SerilogLogger.Abstraction.LoggerInterface;
 
 namespace SerilogLogger.Implementation.LoggerImplementation.NormalLog;
 
 public class SeriLogNormalLogger : BaseSeriLog, ILog
 {
-    public SeriLogNormalLogger(string applicationId, string applicationName) : base(applicationId, applicationName)
-    { }
+	public SeriLogNormalLogger(ILogger logger, IOptions<ApplicationLogConfiguration> config) : base(logger, config) { }
 
-    public void Debug(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
-        => SendLog(LogEventLevel.Debug, messageTemplate, callerName, exception, parameters);
+	public void Verbose(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!)
+	{
+		if (string.IsNullOrWhiteSpace(messageTemplate))
+			throw new ArgumentException("Message template cannot be null or empty", nameof(messageTemplate));
 
-    public void Error(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
-        => SendLog(LogEventLevel.Error, messageTemplate, callerName, exception, parameters);
+		SendLog(LogEventLevel.Verbose, messageTemplate, methodName, callerPath, exception, properties, options);
+	}
 
-    public void Fatal(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
-        => SendLog(LogEventLevel.Fatal, messageTemplate, callerName, exception, parameters);
+	public void Debug(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!)
+	{
+		if (string.IsNullOrWhiteSpace(messageTemplate))
+			throw new ArgumentException("Message template cannot be null or empty", nameof(messageTemplate));
 
-    public void Information(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
-        => SendLog(LogEventLevel.Information, messageTemplate, callerName, exception, parameters);
+		SendLog(LogEventLevel.Debug, messageTemplate, methodName, callerPath, exception, properties, options);
+	}
 
-    public void Verbose(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
-        => SendLog(LogEventLevel.Verbose, messageTemplate, callerName, exception, parameters);
+	public void Information(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!)
+	{
+		if (string.IsNullOrWhiteSpace(messageTemplate))
+			throw new ArgumentException("Message template cannot be null or empty", nameof(messageTemplate));
 
-    public void Warning(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!)
-        => SendLog(LogEventLevel.Warning, messageTemplate, callerName, exception, parameters);
+		SendLog(LogEventLevel.Information, messageTemplate, methodName, callerPath, exception, properties, options);
+	}
+
+	public void Warning(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!)
+	{
+		if (string.IsNullOrWhiteSpace(messageTemplate))
+			throw new ArgumentException("Message template cannot be null or empty", nameof(messageTemplate));
+
+		SendLog(LogEventLevel.Warning, messageTemplate, methodName, callerPath, exception, properties, options);
+	}
+
+	public void Error(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!)
+	{
+		if (string.IsNullOrWhiteSpace(messageTemplate))
+			throw new ArgumentException("Message template cannot be null or empty", nameof(messageTemplate));
+
+		SendLog(LogEventLevel.Error, messageTemplate, methodName, callerPath, exception, properties, options);
+	}
+
+	public void Fatal(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!)
+	{
+		if (string.IsNullOrWhiteSpace(messageTemplate))
+			throw new ArgumentException("Message template cannot be null or empty", nameof(messageTemplate));
+
+		SendLog(LogEventLevel.Fatal, messageTemplate, methodName, callerPath, exception, properties, options);
+	}
+
+
 }

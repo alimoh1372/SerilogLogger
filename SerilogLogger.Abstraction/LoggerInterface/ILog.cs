@@ -1,16 +1,59 @@
+﻿// ===================================
+// ILog.cs - Enhanced Interface
+// ===================================
+using System.Runtime.CompilerServices;
+using SerilogLogger.Abstraction.Dtos;
+
 namespace SerilogLogger.Abstraction.LoggerInterface;
 
 public interface ILog
 {
-    public void Verbose(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!);
+	public void Verbose(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!
+		);
 
-    public void Debug(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!);
+	void Debug(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!
+		);
 
-    public void Information(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!);
+	void Information(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!);
 
-    public void Warning(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!);
+	void Warning(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!);
 
-    public void Error(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!);
+	void Error(string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!);
 
-    public void Fatal(string messageTemplate, List<KeyValuePair<string, object>>? parameters = null, Exception? exception = null, [CallerMemberName] string callerName = null!);
+	void Fatal(
+		string messageTemplate,
+		Dictionary<string, object?>? properties = null,
+		Exception? exception = null,
+		LoggingOptions? options = null,
+		[CallerMemberName] string methodName = null!,
+		[CallerFilePath] string callerPath = null!);
 }

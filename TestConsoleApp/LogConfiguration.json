@@ -1,7 +1,16 @@
 {
-  "ApplicationLogConfiguration": {
+  "LogConfiguration": {
     "LoggerType": "Normal",
-    "SerilogSelfErrorLogs": "D:\\Logs\\SerilogErrors\\serilog-selfLog.txt"
+    "SerilogSelfErrorLogs": "logs/serilog-errors.log",
+    "EnablePerformanceLogging": false,
+    "EnableMethodCallTracking": false,
+    "MaxObjectDepth": 1,
+    "MaxCollectionItems": 0,
+    "EnableAsyncLogging": true,
+    "AsyncBufferSize": 10000,
+    "AsyncFlushInterval": "00:00:01",
+    "EnableContextualProperties": true,
+    "EnableExceptionDetails": true
   },
   "Serilog": {
     "MinimumLevel": {
@@ -14,7 +23,6 @@
     },
     "Using": [
       "Serilog.Sinks.File",
-      "Serilog.Sinks.Console",
       "Serilog.Sinks.Async",
       "Serilog.Expressions"
     ],
@@ -23,13 +31,6 @@
       "ApplicationName": "SampleApp"
     },
     "WriteTo": [
-      {
-        "Name": "Console",
-        "Args": {
-          "outputTemplate": "{Timestamp:HH:mm:ss} [{Level:u3}] {ClassName}.{MethodName} {Message} {Properties}{NewLine}{Exception}",
-          "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console"
-        }
-      },
       {
         "Name": "Async",
         "Args": {
@@ -50,7 +51,7 @@
                     {
                       "Name": "File",
                       "Args": {
-                        "path": "D:\\Logs\\TestSerilog\\InformationToUp\\Log-.json",
+                        "path": "D:\\Logs\\Log-.json",
                         "rollingInterval": "Day",
                         "retainedFileCountLimit": 30,
                         "rollOnFileSizeLimit": true,
@@ -89,7 +90,7 @@
                     {
                       "Name": "File",
                       "Args": {
-                        "path": "D:\\Logs\\InformationJust\\Information-.txt",
+                        "path": "D:\\Logs\\Logs/Information-.txt",
                         "outputTemplate": "Level      :{Level:u3}{NewLine}Message    :{Message}{NewLine}Time       :{Timestamp:yyyy-MM-dd HH:mm:ss.fff}{NewLine}Properties :{Properties:j}{NewLine}Exception  :{Exception}{NewLine}*******************************{NewLine}",
                         "fileSizeLimitBytes": 268435456,
                         "rollingInterval": "Day",

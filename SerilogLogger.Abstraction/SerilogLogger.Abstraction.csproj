@@ -1,11 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
 
-	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<LangVersion>10.0</LangVersion>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	</PropertyGroup>
+    <!-- NuGet Package Configuration -->
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>SerilogLogger.Abstraction</PackageId>
+    <PackageVersion>2.0.2</PackageVersion>
+    <AssemblyVersion>2.0.2</AssemblyVersion>
+    <FileVersion>2.0.2</FileVersion>
+    <Version>2.0.2</Version>
+    <Title>Serilog Logger Abstraction</Title>
+    <Authors>AliMoh</Authors>
+    <Company>AM</Company>
+    <Product>SerilogLogger</Product>
+    <Description>Abstraction layer for Serilog logging functionality with interfaces and DTOs.</Description>
+    <PackageTags>serilog;logging;abstraction;interface</PackageTags>
+    <PackageProjectUrl>https://github.com/yourrepo/seriloglogger</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/yourrepo/seriloglogger</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Initial release with core abstractions for logging.</PackageReleaseNotes>
+    <Copyright>Copyright © AM 2025</Copyright>
+  </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
 </Project>
