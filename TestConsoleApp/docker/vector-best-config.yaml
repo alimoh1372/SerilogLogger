@@ -1,0 +1,89 @@
+data_dir: "/var/lib/vector"
+
+sources:
+  app_logs:
+    type: "file"
+    include:
+      - "/var/log/app/log-*.json"
+    read_from: "beginning"
+    file_key: "file_path"
+    host_key: "host"
+
+transforms:
+  parse_and_flatten:
+    type: "remap"
+    inputs: ["app_logs"]
+    source: |
+      # Parse JSON
+      parsed = parse_json!(.message)
+      
+      # Create completely flat structure
+      .log_level = parsed.Level || "Unknown"
+      .log_message = parsed.MessageTemplate || "No message"
+      .log_timestamp = parsed.Timestamp
+      
+      # Extract Properties safely
+      if exists(parsed.Properties) {
+        props = parsed.Properties
+        .app_id = props.ApplicationId || "unknown"
+        .app_name = props.ApplicationName || "unknown" 
+        .process_id = props.ProcessId || 0
+        .thread_id = props.ThreadId || 0
+        .method_name = props.MethodName || null
+        .class_name = props.ClassName || null
+        .machine_name = props.MachineName || "unknown"
+        .process_name = props.ProcessName || "unknown"
+        .thread_name = props.ThreadName || null
+        .message_id = props.MessageId || null
+      }
+      
+      # Add metadata
+      .source_file = .file_path
+      .source_host = .host
+      .log_source = "serilog"
+      .processed_at = now()
+      
+      # Set timestamp
+      if exists(.log_timestamp) {
+        .@timestamp = parse_timestamp!(.log_timestamp, format: "%+")
+      }
+      
+      # Clean up
+      del(.message)
+      del(.source_type)
+      del(.file_path)
+      del(.host)
+
+sinks:
+  # Single event HTTP posts
+  to_logstash_individual:
+    type: "http"
+    inputs: ["parse_and_flatten"]
+    uri: "http://192.168.4.131:8080"
+    method: "post"
+    
+    # تک تک ارسال - هیچ batching نباشد
+    encoding:
+      codec: "json"
+    
+    # هیچ batch تعریف نکن
+    
+    # Simple buffer
+    buffer:
+      max_events: 100
+      when_full: "drop_newest"
+    
+    # Fast request settings
+    request:
+      timeout_secs: 5
+      retry_attempts: 1
+      in_flight_limit: 1
+    
+    headers:
+      Content-Type: "application/json"
+      
+  to_console_newline:
+    type: "console"
+    inputs: ["parse_and_flatten"]
+    encoding:
+      codec: "json"

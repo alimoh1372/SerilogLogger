@@ -1,6 +1,39 @@
-﻿#region PerformanceTest
+﻿using TestConsoleApp.PerformanceTest;
+using Prometheus;
+using System.Diagnostics;
 
-using TestConsoleApp.PerformanceTest;
+#region Prometeus 
+
+
+
+
+var metricServer = new KestrelMetricServer(port: 9090);
+metricServer.Start();
+
+var workingSet = Metrics.CreateGauge("app_working_set_bytes", "Process working set");
+var gc_heap = Metrics.CreateGauge("app_managed_heap_bytes", "Managed heap size (approx)");
+var cpu_total = Metrics.CreateGauge("app_cpu_total_seconds", "CPU total processor time (s)");
+var logs_sent = Metrics.CreateCounter("app_logs_emitted_total", "Total logs emitted by app");
+
+// Background sampler
+_ = Task.Run(async () =>
+{
+	var proc = Process.GetCurrentProcess();
+	while (true)
+	{
+		proc.Refresh();
+		workingSet.Set(proc.WorkingSet64);
+		cpu_total.Set(proc.TotalProcessorTime.TotalSeconds);
+		gc_heap.Set(GC.GetTotalMemory(false));
+		await Task.Delay(5000);
+	}
+});
+
+#endregion
+
+
+#region PerformanceTest
+
 
 Console.WriteLine("🏁 Professional Logger Performance Test Suite");
 Console.WriteLine("==============================================");

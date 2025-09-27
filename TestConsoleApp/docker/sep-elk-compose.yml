@@ -1,0 +1,25 @@
+services:
+  elk:
+    image: sebp/elk:latest
+    ports:
+      - "5601:5601"   # Kibana
+      - "9200:9200"   # Elasticsearch
+      - "5044:5044"   # Logstash Beats input
+      - "5000:5000"   # Logstash TCP input
+    environment:
+      - MAX_MAP_COUNT=262144
+      - ES_MIN_MEM=512m
+      - ES_MAX_MEM=512m
+      - LS_MIN_MEM=512m
+      - LS_MAX_MEM=512m
+    volumes:
+      - elk_data:/var/lib/elasticsearch
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: unless-stopped
+
+volumes:
+  elk_data:
+    driver: local

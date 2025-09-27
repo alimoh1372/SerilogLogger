@@ -1,0 +1,123 @@
+data_dir: "/var/lib/vector"
+
+api:
+  address: "0.0.0.0:8686"
+  enabled: true
+  
+sources:
+  app_logs:
+    type: "file"
+    include:
+      - "/var/log/app/log-*.json"
+    read_from: "beginning"
+    file_key: "file_path"
+    host_key: "host"
+    fingerprinting:
+      strategy: "device_and_inode"
+    ignore_older_secs: 31536000
+    oldest_first: true
+    #when reached to end of file after 25 hour not writing to it remove it.
+    remove_after_secs: 90000 #after 25 hour
+    
+transforms:
+  parse_and_flatten:
+    type: "remap"
+    inputs: ["app_logs"]
+    drop_on_error: false
+    source: |
+      # Parse JSON with error handling
+      parsed, err = parse_json(.message)
+      if err != null {
+        log("JSON Parse Error: " + string!(err), level: "error")
+        .parse_error = string!(err)
+        .original_message = .message
+        abort
+      }
+      
+      # Basic fields
+      .log_level = parsed.Level || "unknown"
+      .log_message = parsed.MessageTemplate || "no message"
+      .log_timestamp = parsed.Timestamp
+      
+      # Extract specific fields from Properties
+      if exists(parsed.Properties) {
+        props = parsed.Properties
+        .app_id = props.ApplicationId || "unknown"
+        .app_name = props.ApplicationName || "unknown"
+        # Keep all properties as JSON string for text search
+        .app_properties = encode_json(props)
+        .source_file = .file_path
+        .source_host = .host
+        .log_source = "serilog"
+        .processed_at = now()
+        
+        # Set timestamp
+        if exists(.log_timestamp) {
+          parsed_time, time_err = parse_timestamp(.log_timestamp, format: "%+")
+          if time_err == null {
+            .@timestamp = parsed_time
+          } else {
+            .@timestamp = now()
+            .timestamp_parse_error = string!(time_err)
+          }
+        } else {
+          .@timestamp = now()
+        }
+      } else {
+        .app_id = "unknown"
+        .app_name = "unknown"
+        .app_properties = "{}"
+        .source_file = .file_path
+        .source_host = .host
+        .log_source = "serilog"
+        .processed_at = now()
+        .@timestamp = now()
+      }
+      
+      # Clean up
+      del(.message)
+      del(.source_type)
+      del(.file_path)
+      del(.host)
+
+sinks:
+  to_logstash:
+    type: "http"
+    inputs: ["parse_and_flatten"]
+    uri: "http://192.168.4.131:8080"
+    method: "post"
+    compression: "gzip"
+    encoding:
+      codec: "json"
+    
+    # Single events for reliability
+    batch:
+      max_events: 1
+      timeout_secs: 1
+    
+    # Disk buffer for 100% reliability
+    buffer:
+      type: "disk"
+      max_size: 2147483648  # 2GB
+      when_full: "block"    # Never drop, block until space
+    
+    # Robust request settings
+    request:
+      timeout_secs: 30
+      retry_attempts: 10
+      retry_initial_backoff_secs: 1
+      retry_max_duration_secs: 600
+      in_flight_limit: 5
+    
+    headers:
+      Content-Type: "application/json"
+    
+    # Wait for acknowledgement
+    acknowledgements:
+      enabled: true
+      
+  to_console:
+    type: "console"
+    inputs: ["parse_and_flatten"]
+    encoding:
+      codec: "json"

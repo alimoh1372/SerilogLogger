@@ -1,0 +1,69 @@
+{
+  "index_patterns": ["serilog-logs-*"],
+  "priority": 500,
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "refresh_interval": "5s",
+        "codec": "best_compression"
+      }
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "log_level": {
+          "type": "keyword",
+          "fields": {
+            "text": {
+              "type": "text"
+            }
+          }
+        },
+        "log_message": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "app_id": {
+          "type": "keyword"
+        },
+        "app_name": {
+          "type": "keyword"
+        },
+        "app_properties": {
+          "type": "text"
+        },
+        "log_source": {
+          "type": "keyword"
+        },
+        "log_timestamp": {
+          "type": "date"
+        },
+        "received_at": {
+          "type": "date"
+        },
+        "processed_by": {
+          "type": "keyword"
+        },
+        "source_file": {
+          "type": "keyword"
+        },
+        "source_host": {
+          "type": "keyword"
+        },
+        "processed_at": {
+          "type": "date"
+        }
+      }
+    }
+  }
+}

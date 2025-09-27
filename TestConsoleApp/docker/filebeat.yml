@@ -1,0 +1,53 @@
+filebeat.inputs:
+  - type: filestream
+    id: app-logs
+    enabled: true
+    paths:
+      - /var/log/app/log-*.json
+    close.on_state_change.removed: true
+    close.on_state_change.inactive: 25h
+    clean_removed: true
+    ignore_older: 8760h
+    tail_files: false
+    harvester_limit: 5
+    parsers:
+      - ndjson:
+          keys_under_root: true
+          overwrite_keys: true
+          message_key: message
+          
+prospector.scanner.fingerprint.length: 100
+
+fields:
+  log_source: serilog
+
+processors:
+  - add_fields:
+      target: ""
+      fields:
+        source_file: "%{[log][file][path]}"
+        source_host: "%{[host][name]}"
+
+output.logstash:
+  hosts: ["192.168.4.131:5045"]
+  loadbalance: true
+  bulk_max_size: 50   # بهتر از 1
+
+queue.disk:
+  path: "/var/lib/filebeat/queue"
+  max_size: 2gb
+  flush.min_events: 1
+  flush.timeout: 1s
+
+filebeat.shutdown_timeout: 30s
+
+setup.template.name: "serilog-logs"
+setup.template.pattern: "serilog-logs-*"
+setup.template.enabled: true
+
+logging.level: debug
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat.log
+  keepfiles: 7

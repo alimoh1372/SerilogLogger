@@ -1,7 +1,7 @@
 {
   "LogConfiguration": {
     "LoggerType": "Normal",
-    "SerilogSelfErrorLogs": "logs/serilog-errors.log",
+    "SerilogSelfErrorLogs": "logs\\serilog-errors.log",
     "EnablePerformanceLogging": false,
     "EnableMethodCallTracking": false,
     "MaxObjectDepth": 1,
@@ -36,117 +36,21 @@
         "Args": {
           "configure": [
             {
-              "Name": "Logger",
+              "Name": "File",
               "Args": {
-                "configureLogger": {
-                  "Filter": [
-                    {
-                      "Name": "ByIncludingOnly",
-                      "Args": {
-                        "expression": "@l in ['Information', 'Warning', 'Error', 'Fatal']"
-                      }
-                    }
-                  ],
-                  "WriteTo": [
-                    {
-                      "Name": "File",
-                      "Args": {
-                        "path": "D:\\Logs\\Log-.json",
-                        "rollingInterval": "Day",
-                        "retainedFileCountLimit": 30,
-                        "rollOnFileSizeLimit": true,
-                        "fileSizeLimitBytes": 10485760,
-                        "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-                        "buffered": true,
-                        "flushToDiskInterval": "00:00:01"
-                      }
-                    }
-                  ]
-                }
+                "path": "/var/log/app/log-.json",
+                "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
+                "rollingInterval": "Day",
+                "rollOnFileSizeLimit": true,
+                "fileSizeLimitBytes": 104857600,
+                "retainedFileCountLimit": null,
+                "buffered": true,
+                "flushToDiskInterval": "00:00:01",
+                "shared": false
               }
             }
           ],
           "bufferSize": 10000,
-          "blockWhenFull": false
-        }
-      },
-      {
-        "Name": "Async",
-        "Args": {
-          "configure": [
-            {
-              "Name": "Logger",
-              "Args": {
-                "configureLogger": {
-                  "Filter": [
-                    {
-                      "Name": "ByIncludingOnly",
-                      "Args": {
-                        "expression": "@l = 'Information'"
-                      }
-                    }
-                  ],
-                  "WriteTo": [
-                    {
-                      "Name": "File",
-                      "Args": {
-                        "path": "D:\\Logs\\Logs/Information-.txt",
-                        "outputTemplate": "Level      :{Level:u3}{NewLine}Message    :{Message}{NewLine}Time       :{Timestamp:yyyy-MM-dd HH:mm:ss.fff}{NewLine}Properties :{Properties:j}{NewLine}Exception  :{Exception}{NewLine}*******************************{NewLine}",
-                        "fileSizeLimitBytes": 268435456,
-                        "rollingInterval": "Day",
-                        "retainedFileCountLimit": 10,
-                        "rollOnFileSizeLimit": true,
-                        "restrictedToMinimumLevel": "Information",
-                        "buffered": true,
-                        "flushToDiskInterval": "00:00:01"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ],
-          "bufferSize": 10000,
-          "blockWhenFull": false
-        }
-      },
-      {
-        "Name": "Async",
-        "Args": {
-          "configure": [
-            {
-              "Name": "Logger",
-              "Args": {
-                "configureLogger": {
-                  "Filter": [
-                    {
-                      "Name": "ByIncludingOnly",
-                      "Args": {
-                        "expression": "@l in ['Error', 'Fatal']"
-                      }
-                    }
-                  ],
-                  "WriteTo": [
-                    {
-                      "Name": "File",
-                      "Args": {
-                        "path": "D:\\Logs\\Logs/Error-.json",
-                        "rollingInterval": "Day",
-                        "retainedFileCountLimit": 30,
-                        "rollOnFileSizeLimit": true,
-                        "fileSizeLimitBytes": 10485760,
-                        "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog",
-                        "restrictedToMinimumLevel": "Error",
-                        "buffered": true,
-                        "flushToDiskInterval": "00:00:01"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ],
-          "bufferSize": 5000,
           "blockWhenFull": false
         }
       }
